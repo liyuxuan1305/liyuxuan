@@ -7,7 +7,6 @@
     <style>
         body { 
             font-family: 'PingFang SC', sans-serif; 
-            /* 背景图设置 */
             background: url('beijing.jpg') no-repeat center center fixed; 
             background-size: cover;
             display: flex; 
@@ -17,8 +16,8 @@
             margin: 0; 
         }
         .card { 
-            background: rgba(255, 255, 255, 0.9); /* 半透明白色，防止背景太花看不清字 */
-            backdrop-filter: blur(10px); /* 磨砂玻璃效果 */
+            background: rgba(255, 255, 255, 0.9); 
+            backdrop-filter: blur(10px); 
             border-radius: 20px; 
             box-shadow: 0 10px 30px rgba(0,0,0,0.2); 
             width: 90%; 
@@ -38,15 +37,32 @@
         .avatar img { width: 100%; height: 100%; object-fit: cover; }
         h1 { margin: 10px 0; color: #333; font-size: 28px; }
         .title { color: #0070f3; font-weight: bold; margin-bottom: 15px; display: block; }
-        p { color: #444; line-height: 1.6; }
         .tag { display: inline-block; background: #333; color: #fff; padding: 5px 15px; border-radius: 20px; font-size: 14px; margin: 5px; }
         
         .btn-group { display: flex; flex-direction: column; gap: 10px; margin-top: 25px; }
-        .contact-btn { background: #000; color: white; text-decoration: none; padding: 12px; border-radius: 10px; font-weight: bold; }
-        .wechat-btn { background: #07c160; color: white; border: none; padding: 12px; border-radius: 10px; font-weight: bold; cursor: pointer; }
+        .wechat-btn { background: #07c160; color: white; border: none; padding: 12px; border-radius: 10px; font-weight: bold; cursor: pointer; font-size: 16px; }
 
-        #qrcode-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); justify-content: center; align-items: center; z-index: 100; }
-        #qrcode-modal img { width: 250px; border-radius: 10px; background: white; padding: 10px; }
+        /* 弹窗核心样式 */
+        #qrcode-modal { 
+            display: none; 
+            position: fixed; 
+            top: 0; left: 0; 
+            width: 100%; height: 100%; 
+            background: rgba(0,0,0,0.9); 
+            justify-content: center; 
+            align-items: center; 
+            z-index: 999; 
+            flex-direction: column;
+            color: white;
+        }
+        #qrcode-modal img { 
+            width: 280px; 
+            height: 280px;
+            border-radius: 10px; 
+            background: white; 
+            padding: 10px; 
+            margin-bottom: 15px;
+        }
     </style>
 </head>
 <body>
@@ -63,21 +79,23 @@
             <span class="tag">烫头</span>
         </div>
         
-        <p>活着吃，死了算。<br>这是我的个人数字化网页。</p>
-        
         <div class="btn-group">
             <button class="wechat-btn" onclick="showQR()">微信联系</button>
-            <a href="https://github.com/你的用户名" class="contact-btn">查看我的 GitHub</a>
         </div>
     </div>
 
     <div id="qrcode-modal" onclick="hideQR()">
-        <img src="wechat.jpg" alt="微信二维码">
+        <p>点击空白处返回</p>
+        <img src="wechat.jpg" alt="正在加载二维码，请确保文件名正确">
     </div>
 
     <script>
-        function showQR() { document.getElementById('qrcode-modal').style.display = 'flex'; }
-        function hideQR() { document.getElementById('qrcode-modal').style.display = 'none'; }
+        function showQR() { 
+            document.getElementById('qrcode-modal').style.display = 'flex'; 
+        }
+        function hideQR() { 
+            document.getElementById('qrcode-modal').style.display = 'none'; 
+        }
     </script>
 </body>
 </html>
