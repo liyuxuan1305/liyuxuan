@@ -40,9 +40,8 @@
         .tag { display: inline-block; background: #333; color: #fff; padding: 5px 15px; border-radius: 20px; font-size: 14px; margin: 5px; }
         
         .btn-group { display: flex; flex-direction: column; gap: 10px; margin-top: 25px; }
-        .wechat-btn { background: #07c160; color: white; border: none; padding: 12px; border-radius: 10px; font-weight: bold; cursor: pointer; font-size: 16px; }
+        .wechat-btn { background: #07c160; color: white; border: none; padding: 12px; border-radius: 10px; font-weight: bold; cursor: pointer; font-size: 16px; height: 45px; }
 
-        /* 弹窗核心样式 */
         #qrcode-modal { 
             display: none; 
             position: fixed; 
@@ -85,8 +84,8 @@
     </div>
 
     <div id="qrcode-modal" onclick="hideQR()">
-        <p>点击空白处返回</p>
-        <img src="wechat.jpg" alt="正在加载二维码，请确保文件名正确">
+        <p style="margin-bottom: 20px;">点击空白处返回</p>
+        <img src="wechat.png" alt="二维码加载中...">
     </div>
 
     <script>
