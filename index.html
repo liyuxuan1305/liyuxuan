@@ -6,15 +6,16 @@
     <title>李宇轩的个人主页</title>
     <style>
         body { 
-            font-family: 'PingFang SC', sans-serif; 
-            background: url('beijing.jpg') no-repeat center center fixed; 
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; 
+            /* 优化点1：背景图使用国内直链 */
+            background: url('https://imgchr.com/i/pZGQ4m9') no-repeat center center fixed; 
             background-size: cover;
             display: flex; justify-content: center; align-items: center; 
             min-height: 100vh; margin: 0; overflow: hidden;
             transition: filter 0.5s ease;
         }
 
-        /* 醉酒晃动特效 */
+        /* 保持之前的特效样式不变... */
         @keyframes dizzy {
             0% { transform: translate(0,0) rotate(0); }
             20% { transform: translate(-10px, 5px) rotate(-2deg); }
@@ -24,82 +25,50 @@
             100% { transform: translate(0,0) rotate(0); }
         }
         .dizzy-effect { animation: dizzy 0.5s infinite; filter: blur(1px); }
-
-        /* 烟雾特效 */
-        #smoke-overlay {
-            position: fixed; top:0; left:0; width:100%; height:100%;
-            background: rgba(100, 100, 100, 0.5); opacity: 0; pointer-events: none;
-            transition: opacity 1s; z-index: 100;
-        }
+        #smoke-overlay { position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(100, 100, 100, 0.5); opacity: 0; pointer-events: none; transition: opacity 1s; z-index: 100; }
 
         .card { 
-            background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(10px); 
+            background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
             border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); 
-            width: 90%; max-width: 400px; padding: 40px; text-align: center; position: relative; z-index: 10;
+            width: 90%; max-width: 380px; padding: 35px; text-align: center; position: relative; z-index: 10;
         }
 
-        /* 双城时间样式 */
-        .world-clock {
-            display: flex; justify-content: space-around; margin-bottom: 20px;
-            font-size: 12px; color: #666; background: rgba(0,0,0,0.05);
-            padding: 10px; border-radius: 10px;
-        }
+        .world-clock { display: flex; justify-content: space-around; margin-bottom: 20px; font-size: 12px; color: #666; background: rgba(0,0,0,0.05); padding: 10px; border-radius: 10px; }
         .clock-item b { display: block; font-size: 14px; color: #0070f3; }
 
-        .avatar { 
-            width: 120px; height: 120px; border-radius: 50%; 
-            margin: 0 auto 20px; overflow: hidden; border: 3px solid #fff;
-            transition: transform 0.8s cubic-bezier(0.68, -0.55, 0.27, 1.55);
-        }
+        .avatar { width: 110px; height: 110px; border-radius: 50%; margin: 0 auto 15px; overflow: hidden; border: 3px solid #fff; transition: transform 0.8s cubic-bezier(0.68, -0.55, 0.27, 1.55); }
         .avatar img { width: 100%; height: 100%; object-fit: cover; }
         
-        h1 { margin: 10px 0; color: #333; font-size: 28px; }
-        .typewriter { color: #0070f3; font-weight: bold; margin-bottom: 15px; min-height: 1.2em; }
-        
-        .tag { 
-            display: inline-block; background: #333; color: #fff; padding: 5px 15px; 
-            border-radius: 20px; font-size: 14px; margin: 5px; cursor: pointer;
-        }
-        
-        .btn-group { display: flex; gap: 10px; margin-top: 25px; }
+        h1 { margin: 10px 0; color: #333; font-size: 26px; }
+        .typewriter { color: #0070f3; font-weight: bold; margin-bottom: 15px; min-height: 1.2em; font-size: 15px; }
+        .tag { display: inline-block; background: #333; color: #fff; padding: 5px 12px; border-radius: 20px; font-size: 13px; margin: 4px; cursor: pointer; }
+        .btn-group { display: flex; gap: 10px; margin-top: 20px; }
         .wechat-btn { flex: 1; background: #07c160; color: white; border: none; padding: 12px; border-radius: 10px; font-weight: bold; cursor: pointer; }
         .surprise-btn { flex: 1; background: #f39c12; color: white; border: none; padding: 12px; border-radius: 10px; font-weight: bold; cursor: pointer; }
-
         .note { position: fixed; pointer-events: none; font-size: 24px; animation: move-up 4s linear forwards; z-index: 1; }
-        @keyframes move-up {
-            0% { transform: translateY(100vh); opacity: 1; }
-            100% { transform: translateY(-100px); opacity: 0; }
-        }
-
-        #modal-overlay { 
-            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-            background: rgba(0,0,0,0.85); justify-content: center; align-items: center; 
-            z-index: 999; flex-direction: column; color: white;
-        }
-
+        @keyframes move-up { 0% { transform: translateY(100vh); opacity: 1; } 100% { transform: translateY(-100px); opacity: 0; } }
+        #modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); justify-content: center; align-items: center; z-index: 999; flex-direction: column; color: white; }
         .music-ctrl { position: absolute; top: 15px; right: 15px; cursor: pointer; font-size: 20px; background: none; border: none; z-index: 20; }
     </style>
 </head>
-<body onclick="firstClick()"> <div id="smoke-overlay"></div>
-
+<body onclick="firstClick()">
+    <div id="smoke-overlay"></div>
     <div class="card">
         <button class="music-ctrl" onclick="toggleMusic(event)" id="musicBtn">🎵</button>
-
         <div class="world-clock">
-            <div class="clock-item">天津 (Tianjin)<b id="tj-time">00:00</b></div>
-            <div class="clock-item" style="border-left: 1px solid #ccc; padding-left: 15px;">巴斯 (Bath)<b id="bath-time">00:00</b></div>
+            <div class="clock-item">天津 <b id="tj-time">00:00</b></div>
+            <div class="clock-item" style="border-left: 1px solid #ddd; padding-left: 15px;">巴斯 <b id="bath-time">00:00</b></div>
         </div>
-
-        <div class="avatar" id="avatar"><img src="yuxuan.jpg" alt="头像"></div>
+        <div class="avatar" id="avatar">
+            <img src="https://imgchr.com/i/pZGQfOJ" alt="头像">
+        </div>
         <h1>李宇轩</h1>
         <div class="typewriter"><span id="type-text"></span><span style="animation: blink 0.7s infinite;">|</span></div>
-        
         <div>
             <span class="tag" onclick="doSmoke()">🚬 抽烟</span>
             <span class="tag" onclick="doDrink()">🍺 喝酒</span>
             <span class="tag" onclick="doPerm()">💇‍♂️ 烫头</span>
         </div>
-        
         <div class="btn-group">
             <button class="wechat-btn" onclick="showWechat()">微信联系</button>
             <button class="surprise-btn" onclick="popQuote()">投喂烟钱</button>
@@ -110,97 +79,55 @@
         <div id="modal-body" style="width:80%; max-width:300px; text-align:center;"></div>
     </div>
 
-    <audio id="bgMusic" loop>
+    <audio id="bgMusic" loop preload="auto">
         <source src="music.mp3" type="audio/mpeg">
     </audio>
 
     <script>
+        // 逻辑保持不变，确保点击后触发播放
         const audio = document.getElementById("bgMusic");
         const btn = document.getElementById("musicBtn");
+        function firstClick() { if (audio.paused) { audio.play(); btn.innerHTML = "🎵"; } }
+        function toggleMusic(e) { e.stopPropagation(); if (audio.paused) { audio.play(); btn.innerHTML = "🎵"; } else { audio.pause(); btn.innerHTML = "🔇"; } }
 
-        // 解决浏览器禁音政策：用户第一次点击网页任何地方即开始播放
-        function firstClick() {
-            if (audio.paused) {
-                audio.play();
-                btn.innerHTML = "🎵";
-            }
-        }
-
-        function toggleMusic(e) {
-            e.stopPropagation(); // 防止触发 body 的 firstClick
-            if (audio.paused) {
-                audio.play();
-                btn.innerHTML = "🎵";
-            } else {
-                audio.pause();
-                btn.innerHTML = "🔇";
-            }
-        }
-
-        // --- 逻辑：双城时间 ---
         function updateClocks() {
             const now = new Date();
             const options = { hour: '2-digit', minute: '2-digit', hour12: false };
             document.getElementById('tj-time').innerText = now.toLocaleTimeString('zh-CN', { ...options, timeZone: 'Asia/Shanghai' });
             document.getElementById('bath-time').innerText = now.toLocaleTimeString('en-GB', { ...options, timeZone: 'Europe/London' });
         }
-        setInterval(updateClocks, 1000);
-        updateClocks();
+        setInterval(updateClocks, 1000); updateClocks();
 
-        // --- 逻辑：互动特效 ---
-        function doSmoke() {
-            const smoke = document.getElementById('smoke-overlay');
-            smoke.style.opacity = '1';
-            setTimeout(() => { smoke.style.opacity = '0'; }, 3000);
-        }
-        function doDrink() {
-            document.body.classList.add('dizzy-effect');
-            setTimeout(() => { document.body.classList.remove('dizzy-effect'); }, 3000);
-        }
-        function doPerm() {
-            const avatar = document.getElementById('avatar');
-            avatar.style.transform = 'rotate(360deg)';
-            setTimeout(() => { avatar.style.transform = 'rotate(0deg)'; }, 800);
-        }
+        function doSmoke() { const s = document.getElementById('smoke-overlay'); s.style.opacity = '1'; setTimeout(() => s.style.opacity = '0', 3000); }
+        function doDrink() { document.body.classList.add('dizzy-effect'); setTimeout(() => document.body.classList.remove('dizzy-effect'), 3000); }
+        function doPerm() { const a = document.getElementById('avatar'); a.style.transform = 'rotate(360deg)'; setTimeout(() => a.style.transform = 'rotate(0deg)', 800); }
 
-        // --- 逻辑：打字机 ---
         const text = "就读于天津市第五中学";
-        let index = 0;
-        function type() {
-            if (index < text.length) {
-                document.getElementById("type-text").innerHTML += text.charAt(index);
-                index++; setTimeout(type, 150);
-            }
-        }
+        let idx = 0;
+        function type() { if (idx < text.length) { document.getElementById("type-text").innerHTML += text.charAt(idx); idx++; setTimeout(type, 150); } }
 
-        // --- 逻辑：音符弹幕 ---
         window.onload = () => {
             type();
             setInterval(() => {
-                const note = document.createElement('div');
-                note.className = 'note';
-                note.innerText = ['♫','♪','♬'][Math.floor(Math.random()*3)];
-                note.style.left = Math.random()*100+'vw';
-                note.style.color = `hsl(${Math.random()*360}, 70%, 70%)`;
-                document.body.appendChild(note);
-                setTimeout(() => note.remove(), 4000);
+                const n = document.createElement('div');
+                n.className = 'note'; n.innerText = ['♫','♪','♬'][Math.floor(Math.random()*3)];
+                n.style.left = Math.random()*100+'vw';
+                n.style.color = `hsl(${Math.random()*360}, 70%, 70%)`;
+                document.body.appendChild(n); setTimeout(() => n.remove(), 4000);
             }, 600);
-            // 尝试静音自动播放（虽成功率低，但保留）
-            audio.play().catch(() => {});
         };
 
         const quotes = ["🚬 烟可以不抽，头不能不烫！", "🍺 借问酒家何处有，五中跟我走", "🎓 巴斯斯巴的雨，没五中的风大", "✨ 既然来了，点个微信联系我吧"];
         function popQuote() {
             const q = quotes[Math.floor(Math.random()*quotes.length)];
             const el = document.createElement('div');
-            el.style = "position:fixed; left:50%; top:45%; transform:translate(-50%,-50%); background:rgba(0,0,0,0.8); color:white; padding:15px 25px; border-radius:50px; z-index:1000; animation: fade-out-up 2s forwards;";
-            el.innerHTML = q;
-            document.body.appendChild(el);
-            setTimeout(() => el.remove(), 2000);
+            el.style = "position:fixed; left:50%; top:45%; transform:translate(-50%,-50%); background:rgba(0,0,0,0.9); color:white; padding:15px 25px; border-radius:50px; z-index:1000; animation: fade-out-up 2s forwards; white-space:nowrap;";
+            el.innerHTML = q; document.body.appendChild(el); setTimeout(() => el.remove(), 2000);
         }
 
         function showWechat() {
-            document.getElementById('modal-body').innerHTML = `<h3>扫码联系我</h3><img src="wechat.png" style="width:100%; border-radius:10px; background:white; padding:10px;">`;
+            // 优化点4：微信二维码也换成直链
+            document.getElementById('modal-body').innerHTML = `<h3>扫码联系我</h3><img src="https://imgchr.com/i/pZGQWy4" style="width:100%; border-radius:10px; background:white; padding:10px;">`;
             document.getElementById('modal-overlay').style.display = 'flex';
         }
         function hideModal() { document.getElementById('modal-overlay').style.display = 'none'; }
