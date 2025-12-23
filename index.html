@@ -24,53 +24,55 @@
             max-width: 400px; 
             padding: 40px; 
             text-align: center; 
+            position: relative;
         }
         .avatar { 
-            width: 120px; 
-            height: 120px; 
-            background: #eee; 
-            border-radius: 50%; 
-            margin: 0 auto 20px; 
-            overflow: hidden; 
+            width: 120px; height: 120px; 
+            background: #eee; border-radius: 50%; 
+            margin: 0 auto 20px; overflow: hidden; 
             border: 3px solid #fff;
         }
         .avatar img { width: 100%; height: 100%; object-fit: cover; }
         h1 { margin: 10px 0; color: #333; font-size: 28px; }
-        .title { color: #0070f3; font-weight: bold; margin-bottom: 15px; display: block; }
-        .tag { display: inline-block; background: #333; color: #fff; padding: 5px 15px; border-radius: 20px; font-size: 14px; margin: 5px; }
         
+        /* 打字机光标效果 */
+        .typewriter { 
+            color: #0070f3; font-weight: bold; 
+            margin-bottom: 15px; display: inline-block;
+            min-height: 1.2em;
+        }
+        .cursor { animation: blink 0.7s infinite; }
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+
+        .tag { display: inline-block; background: #333; color: #fff; padding: 5px 15px; border-radius: 20px; font-size: 14px; margin: 5px; }
         .btn-group { display: flex; flex-direction: column; gap: 10px; margin-top: 25px; }
-        .wechat-btn { background: #07c160; color: white; border: none; padding: 12px; border-radius: 10px; font-weight: bold; cursor: pointer; font-size: 16px; height: 45px; }
+        .wechat-btn { background: #07c160; color: white; border: none; padding: 12px; border-radius: 10px; font-weight: bold; cursor: pointer; }
+
+        /* 音乐按钮 */
+        .music-ctrl {
+            position: absolute; top: 15px; right: 15px;
+            cursor: pointer; font-size: 20px; background: none; border: none;
+        }
 
         #qrcode-modal { 
-            display: none; 
-            position: fixed; 
-            top: 0; left: 0; 
-            width: 100%; height: 100%; 
-            background: rgba(0,0,0,0.9); 
-            justify-content: center; 
-            align-items: center; 
-            z-index: 999; 
-            flex-direction: column;
-            color: white;
+            display: none; position: fixed; top: 0; left: 0; 
+            width: 100%; height: 100%; background: rgba(0,0,0,0.9); 
+            justify-content: center; align-items: center; z-index: 999; 
+            flex-direction: column; color: white;
         }
-        #qrcode-modal img { 
-            width: 280px; 
-            height: 280px;
-            border-radius: 10px; 
-            background: white; 
-            padding: 10px; 
-            margin-bottom: 15px;
-        }
+        #qrcode-modal img { width: 280px; height: 280px; border-radius: 10px; background: white; padding: 10px; }
     </style>
 </head>
 <body>
     <div class="card">
+        <button class="music-ctrl" onclick="toggleMusic()" id="musicBtn">🔇</button>
+
         <div class="avatar">
             <img src="yuxuan.jpg" alt="头像">
         </div>
         <h1>李宇轩</h1>
-        <span class="title">巴斯斯巴大学交换生</span>
+        
+        <div class="typewriter"><span id="type-text"></span><span class="cursor">|</span></div>
         
         <div>
             <span class="tag">抽烟</span>
@@ -83,18 +85,43 @@
         </div>
     </div>
 
+    <audio id="bgMusic" loop>
+        <source src="music.mp3" type="audio/mpeg">
+    </audio>
+
     <div id="qrcode-modal" onclick="hideQR()">
-        <p style="margin-bottom: 20px;">点击空白处返回</p>
-        <img src="wechat.png" alt="二维码加载中...">
+        <p>点击空白处返回</p>
+        <img src="wechat.png" alt="二维码">
     </div>
 
     <script>
-        function showQR() { 
-            document.getElementById('qrcode-modal').style.display = 'flex'; 
+        // 打字机逻辑 - 已更新文本
+        const text = "就读于天津市第五中学";
+        let index = 0;
+        function type() {
+            if (index < text.length) {
+                document.getElementById("type-text").innerHTML += text.charAt(index);
+                index++;
+                setTimeout(type, 200);
+            }
         }
-        function hideQR() { 
-            document.getElementById('qrcode-modal').style.display = 'none'; 
+        window.onload = type;
+
+        // 音乐控制逻辑
+        const audio = document.getElementById("bgMusic");
+        const btn = document.getElementById("musicBtn");
+        function toggleMusic() {
+            if (audio.paused) {
+                audio.play();
+                btn.innerHTML = "🎵";
+            } else {
+                audio.pause();
+                btn.innerHTML = "🔇";
+            }
         }
+
+        function showQR() { document.getElementById('qrcode-modal').style.display = 'flex'; }
+        function hideQR() { document.getElementById('qrcode-modal').style.display = 'none'; }
     </script>
 </body>
 </html>
