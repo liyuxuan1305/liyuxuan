@@ -56,13 +56,10 @@
         h1 { margin: 10px 0; color: #333; font-size: 28px; }
         .typewriter { color: #0070f3; font-weight: bold; margin-bottom: 15px; min-height: 1.2em; }
         
-        /* 标签改为可点击 */
         .tag { 
             display: inline-block; background: #333; color: #fff; padding: 5px 15px; 
             border-radius: 20px; font-size: 14px; margin: 5px; cursor: pointer;
-            transition: transform 0.2s;
         }
-        .tag:active { transform: scale(0.9); }
         
         .btn-group { display: flex; gap: 10px; margin-top: 25px; }
         .wechat-btn { flex: 1; background: #07c160; color: white; border: none; padding: 12px; border-radius: 10px; font-weight: bold; cursor: pointer; }
@@ -79,12 +76,15 @@
             background: rgba(0,0,0,0.85); justify-content: center; align-items: center; 
             z-index: 999; flex-direction: column; color: white;
         }
+
+        .music-ctrl { position: absolute; top: 15px; right: 15px; cursor: pointer; font-size: 20px; background: none; border: none; z-index: 20; }
     </style>
 </head>
-<body>
-    <div id="smoke-overlay"></div>
+<body onclick="firstClick()"> <div id="smoke-overlay"></div>
 
     <div class="card">
+        <button class="music-ctrl" onclick="toggleMusic(event)" id="musicBtn">🎵</button>
+
         <div class="world-clock">
             <div class="clock-item">天津 (Tianjin)<b id="tj-time">00:00</b></div>
             <div class="clock-item" style="border-left: 1px solid #ccc; padding-left: 15px;">巴斯 (Bath)<b id="bath-time">00:00</b></div>
@@ -110,42 +110,60 @@
         <div id="modal-body" style="width:80%; max-width:300px; text-align:center;"></div>
     </div>
 
-    <audio id="bgMusic" loop autoplay><source src="music.mp3" type="audio/mpeg"></audio>
+    <audio id="bgMusic" loop>
+        <source src="music.mp3" type="audio/mpeg">
+    </audio>
 
     <script>
-        // --- 逻辑1：双城时间更新 ---
+        const audio = document.getElementById("bgMusic");
+        const btn = document.getElementById("musicBtn");
+
+        // 解决浏览器禁音政策：用户第一次点击网页任何地方即开始播放
+        function firstClick() {
+            if (audio.paused) {
+                audio.play();
+                btn.innerHTML = "🎵";
+            }
+        }
+
+        function toggleMusic(e) {
+            e.stopPropagation(); // 防止触发 body 的 firstClick
+            if (audio.paused) {
+                audio.play();
+                btn.innerHTML = "🎵";
+            } else {
+                audio.pause();
+                btn.innerHTML = "🔇";
+            }
+        }
+
+        // --- 逻辑：双城时间 ---
         function updateClocks() {
             const now = new Date();
             const options = { hour: '2-digit', minute: '2-digit', hour12: false };
-            
-            // 天津时间 (UTC+8)
             document.getElementById('tj-time').innerText = now.toLocaleTimeString('zh-CN', { ...options, timeZone: 'Asia/Shanghai' });
-            
-            // 英国巴斯时间 (当前为冬令时 UTC+0)
             document.getElementById('bath-time').innerText = now.toLocaleTimeString('en-GB', { ...options, timeZone: 'Europe/London' });
         }
         setInterval(updateClocks, 1000);
         updateClocks();
 
-        // --- 逻辑2：三大爱好互动 ---
+        // --- 逻辑：互动特效 ---
         function doSmoke() {
             const smoke = document.getElementById('smoke-overlay');
             smoke.style.opacity = '1';
             setTimeout(() => { smoke.style.opacity = '0'; }, 3000);
         }
-
         function doDrink() {
             document.body.classList.add('dizzy-effect');
             setTimeout(() => { document.body.classList.remove('dizzy-effect'); }, 3000);
         }
-
         function doPerm() {
             const avatar = document.getElementById('avatar');
             avatar.style.transform = 'rotate(360deg)';
             setTimeout(() => { avatar.style.transform = 'rotate(0deg)'; }, 800);
         }
 
-        // --- 原有功能保持 ---
+        // --- 逻辑：打字机 ---
         const text = "就读于天津市第五中学";
         let index = 0;
         function type() {
@@ -154,6 +172,8 @@
                 index++; setTimeout(type, 150);
             }
         }
+
+        // --- 逻辑：音符弹幕 ---
         window.onload = () => {
             type();
             setInterval(() => {
@@ -165,6 +185,8 @@
                 document.body.appendChild(note);
                 setTimeout(() => note.remove(), 4000);
             }, 600);
+            // 尝试静音自动播放（虽成功率低，但保留）
+            audio.play().catch(() => {});
         };
 
         const quotes = ["🚬 烟可以不抽，头不能不烫！", "🍺 借问酒家何处有，五中跟我走", "🎓 巴斯斯巴的雨，没五中的风大", "✨ 既然来了，点个微信联系我吧"];
