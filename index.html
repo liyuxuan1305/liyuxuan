@@ -5,27 +5,79 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>李宇轩的个人主页</title>
     <style>
-        body { font-family: 'PingFang SC', sans-serif; background: #f0f2f5; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
-        .card { background: white; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); width: 90%; max-width: 400px; padding: 40px; text-align: center; }
-        .avatar { width: 100px; height: 100px; background: #0070f3; border-radius: 50%; margin: 0 auto 20px; display: flex; align-items: center; justify-content: center; color: white; font-size: 40px; font-weight: bold; }
-        h1 { margin: 10px 0; color: #333; }
-        p { color: #666; line-height: 1.6; }
-        .tag { display: inline-block; background: #e1eaff; color: #0070f3; padding: 5px 15px; border-radius: 20px; font-size: 14px; margin: 5px; }
-        .contact-btn { display: block; background: #000; color: white; text-decoration: none; padding: 12px; border-radius: 10px; margin-top: 25px; font-weight: bold; }
+        body { 
+            font-family: 'PingFang SC', sans-serif; 
+            /* 背景图设置 */
+            background: url('beijing.jpg') no-repeat center center fixed; 
+            background-size: cover;
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            min-height: 100vh; 
+            margin: 0; 
+        }
+        .card { 
+            background: rgba(255, 255, 255, 0.9); /* 半透明白色，防止背景太花看不清字 */
+            backdrop-filter: blur(10px); /* 磨砂玻璃效果 */
+            border-radius: 20px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2); 
+            width: 90%; 
+            max-width: 400px; 
+            padding: 40px; 
+            text-align: center; 
+        }
+        .avatar { 
+            width: 120px; 
+            height: 120px; 
+            background: #eee; 
+            border-radius: 50%; 
+            margin: 0 auto 20px; 
+            overflow: hidden; 
+            border: 3px solid #fff;
+        }
+        .avatar img { width: 100%; height: 100%; object-fit: cover; }
+        h1 { margin: 10px 0; color: #333; font-size: 28px; }
+        .title { color: #0070f3; font-weight: bold; margin-bottom: 15px; display: block; }
+        p { color: #444; line-height: 1.6; }
+        .tag { display: inline-block; background: #333; color: #fff; padding: 5px 15px; border-radius: 20px; font-size: 14px; margin: 5px; }
+        
+        .btn-group { display: flex; flex-direction: column; gap: 10px; margin-top: 25px; }
+        .contact-btn { background: #000; color: white; text-decoration: none; padding: 12px; border-radius: 10px; font-weight: bold; }
+        .wechat-btn { background: #07c160; color: white; border: none; padding: 12px; border-radius: 10px; font-weight: bold; cursor: pointer; }
+
+        #qrcode-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); justify-content: center; align-items: center; z-index: 100; }
+        #qrcode-modal img { width: 250px; border-radius: 10px; background: white; padding: 10px; }
     </style>
 </head>
 <body>
     <div class="card">
-        <img src="yuxuan.jpg" class="avatar" style="object-fit: cover;">
-        <h1>李宇轩</h1>
-        <p>exchange student of Bath Spa University</p>
-        <div>
-            <span class="tag">reading</span>
-            <span class="tag">airsoft</span>
-            <span class="tag">English</span>
+        <div class="avatar">
+            <img src="yuxuan.jpg" alt="头像">
         </div>
-        <p>这是李宇轩的个人网站。我目前就读于天津市第五中学。</p>
-        <a href="andy1305@qq.com" class="contact-btn">联系我</a>
+        <h1>李宇轩</h1>
+        <span class="title">巴斯斯巴大学交换生</span>
+        
+        <div>
+            <span class="tag">抽烟</span>
+            <span class="tag">喝酒</span>
+            <span class="tag">烫头</span>
+        </div>
+        
+        <p>活着吃，死了算。<br>这是我的个人数字化网页。</p>
+        
+        <div class="btn-group">
+            <button class="wechat-btn" onclick="showQR()">微信联系</button>
+            <a href="https://github.com/你的用户名" class="contact-btn">查看我的 GitHub</a>
+        </div>
     </div>
+
+    <div id="qrcode-modal" onclick="hideQR()">
+        <img src="wechat.jpg" alt="微信二维码">
+    </div>
+
+    <script>
+        function showQR() { document.getElementById('qrcode-modal').style.display = 'flex'; }
+        function hideQR() { document.getElementById('qrcode-modal').style.display = 'none'; }
+    </script>
 </body>
 </html>
