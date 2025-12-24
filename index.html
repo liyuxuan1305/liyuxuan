@@ -69,4 +69,143 @@
         button:active { transform: scale(0.95); }
 
         .wechat-btn { background: #07c160; color: white; }
-        .surprise-btn { background: #
+        .surprise-btn { background: #f39c12; color: white; }
+        .hall-btn { background: #9b59b6; color: white; } /* 紫色入口按钮 */
+
+        .note { position: fixed; pointer-events: none; font-size: 24px; animation: move-up 4s linear forwards; z-index: 1; }
+        @keyframes move-up {
+            0% { transform: translateY(100vh); opacity: 1; }
+            100% { transform: translateY(-100px); opacity: 0; }
+        }
+
+        #modal-overlay { 
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+            background: rgba(0,0,0,0.85); justify-content: center; align-items: center; 
+            z-index: 999; flex-direction: column; color: white;
+        }
+
+        .music-ctrl { position: absolute; top: 15px; right: 15px; cursor: pointer; font-size: 20px; background: none; border: none; z-index: 20; }
+    </style>
+</head>
+<body onclick="firstClick()">
+    <div id="smoke-overlay"></div>
+
+    <div class="card">
+        <button class="music-ctrl" onclick="toggleMusic(event)" id="musicBtn">🎵</button>
+
+        <div class="world-clock">
+            <div class="clock-item">天津 (Tianjin)<b id="tj-time">00:00</b></div>
+            <div class="clock-item" style="border-left: 1px solid #ccc; padding-left: 15px;">巴斯 (Bath)<b id="bath-time">00:00</b></div>
+        </div>
+
+        <div class="avatar" id="avatar"><img src="yuxuan.jpg" alt="头像"></div>
+        <h1>李宇轩</h1>
+        <div class="typewriter"><span id="type-text"></span><span style="animation: blink 0.7s infinite;">|</span></div>
+        
+        <div>
+            <span class="tag" onclick="doSmoke()">🚬 抽烟</span>
+            <span class="tag" onclick="doDrink()">🍺 喝酒</span>
+            <span class="tag" onclick="doPerm()">💇‍♂️ 烫头</span>
+        </div>
+        
+        <div class="btn-group">
+            <button class="wechat-btn" onclick="showWechat()">微信联系</button>
+            <button class="surprise-btn" onclick="popQuote()">投喂烟钱</button>
+            <button class="hall-btn btn-full" onclick="window.location.href='halloffame.html'">进入“各国领导人”界面</button>
+        </div>
+    </div>
+
+    <div id="modal-overlay" onclick="hideModal()">
+        <div id="modal-body" style="width:80%; max-width:300px; text-align:center;"></div>
+    </div>
+
+    <audio id="bgMusic" loop>
+        <source src="music.mp3" type="audio/mpeg">
+    </audio>
+
+    <script>
+        const audio = document.getElementById("bgMusic");
+        const btn = document.getElementById("musicBtn");
+
+        function firstClick() {
+            if (audio.paused) {
+                audio.play().catch(e => console.log("播放失败"));
+                btn.innerHTML = "🎵";
+            }
+        }
+
+        function toggleMusic(e) {
+            e.stopPropagation();
+            if (audio.paused) {
+                audio.play();
+                btn.innerHTML = "🎵";
+            } else {
+                audio.pause();
+                btn.innerHTML = "🔇";
+            }
+        }
+
+        function updateClocks() {
+            const now = new Date();
+            const options = { hour: '2-digit', minute: '2-digit', hour12: false };
+            document.getElementById('tj-time').innerText = now.toLocaleTimeString('zh-CN', { ...options, timeZone: 'Asia/Shanghai' });
+            document.getElementById('bath-time').innerText = now.toLocaleTimeString('en-GB', { ...options, timeZone: 'Europe/London' });
+        }
+        setInterval(updateClocks, 1000);
+        updateClocks();
+
+        function doSmoke() {
+            const smoke = document.getElementById('smoke-overlay');
+            smoke.style.opacity = '1';
+            setTimeout(() => { smoke.style.opacity = '0'; }, 3000);
+        }
+        function doDrink() {
+            document.body.classList.add('dizzy-effect');
+            setTimeout(() => { document.body.classList.remove('dizzy-effect'); }, 3000);
+        }
+        function doPerm() {
+            const avatar = document.getElementById('avatar');
+            avatar.style.transform = 'rotate(360deg)';
+            setTimeout(() => { avatar.style.transform = 'rotate(0deg)'; }, 800);
+        }
+
+        const text = "就读于天津市第五中学";
+        let index = 0;
+        function type() {
+            if (index < text.length) {
+                document.getElementById("type-text").innerHTML += text.charAt(index);
+                index++; setTimeout(type, 150);
+            }
+        }
+
+        window.onload = () => {
+            type();
+            setInterval(() => {
+                const note = document.createElement('div');
+                note.className = 'note';
+                note.innerText = ['♫','♪','♬'][Math.floor(Math.random()*3)];
+                note.style.left = Math.random()*100+'vw';
+                note.style.color = `hsl(${Math.random()*360}, 70%, 70%)`;
+                document.body.appendChild(note);
+                setTimeout(() => note.remove(), 4000);
+            }, 600);
+        };
+
+        const quotes = ["🚬 烟可以不抽，头不能不烫！", "🍺 借问酒家何处有，五中跟我走", "✨ 既然来了，点个微信联系我吧"];
+        function popQuote() {
+            const q = quotes[Math.floor(Math.random()*quotes.length)];
+            const el = document.createElement('div');
+            el.style = "position:fixed; left:50%; top:45%; transform:translate(-50%,-50%); background:rgba(0,0,0,0.8); color:white; padding:15px 25px; border-radius:50px; z-index:1000; animation: fade-out-up 2s forwards;";
+            el.innerHTML = q;
+            document.body.appendChild(el);
+            setTimeout(() => el.remove(), 2000);
+        }
+
+        function showWechat() {
+            document.getElementById('modal-body').innerHTML = `<h3>扫码联系我</h3><img src="wechat.png" style="width:100%; border-radius:10px; background:white; padding:10px;">`;
+            document.getElementById('modal-overlay').style.display = 'flex';
+        }
+        function hideModal() { document.getElementById('modal-overlay').style.display = 'none'; }
+    </script>
+</body>
+</html>
