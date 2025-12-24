@@ -12,11 +12,12 @@
             display: flex; flex-direction: column; align-items: center; 
             min-height: 100vh; margin: 0; padding: 40px 20px; box-sizing: border-box;
         }
+        /* 返回按钮 */
         .back-btn {
             position: fixed; top: 20px; left: 20px; 
             background: rgba(0,0,0,0.7); color: white; padding: 12px 24px; 
             border-radius: 50px; text-decoration: none; font-weight: bold;
-            backdrop-filter: blur(8px); transition: all 0.3s ease; z-index: 100;
+            backdrop-filter: blur(8px); transition: 0.3s; z-index: 100;
         }
         .container {
             width: 100%; max-width: 1100px; background: rgba(255, 255, 255, 0.92);
@@ -30,35 +31,38 @@
             gap: 25px; justify-content: center;
         }
 
-        /* 增加了点击手势和缩放效果 */
         .leader-card {
             background: #ffffff; border-radius: 25px; padding: 20px;
             box-shadow: 0 10px 25px rgba(0,0,0,0.08);
             transition: 0.3s; border: 1px solid rgba(0,0,0,0.05);
             cursor: pointer;
         }
-        .leader-card:hover { transform: translateY(-10px); }
+        .leader-card:hover { transform: translateY(-10px); box-shadow: 0 15px 30px rgba(0,0,0,0.2); }
         .leader-card img { width: 100%; aspect-ratio: 1/1; object-fit: cover; border-radius: 20px; margin-bottom: 15px; }
+        
         .country-name { display: block; color: #c0392b; font-weight: 800; font-size: 14px; margin-bottom: 5px; }
         .person-name { display: block; color: #2c3e50; font-size: 18px; font-weight: 700; }
 
         /* 弹窗样式 */
         #doc-modal {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.8); backdrop-filter: blur(5px);
+            background: rgba(0,0,0,0.85); backdrop-filter: blur(8px);
             justify-content: center; align-items: center; z-index: 1000;
         }
         .modal-body {
-            background: white; width: 90%; max-width: 500px; border-radius: 25px;
-            padding: 30px; position: relative; animation: popUp 0.3s ease;
+            background: white; width: 90%; max-width: 500px; border-radius: 30px;
+            padding: 40px; position: relative; animation: popUp 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
-        @keyframes popUp { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+        @keyframes popUp { from { transform: scale(0.7); opacity: 0; } to { transform: scale(1); opacity: 1; } }
         
-        .close-modal { position: absolute; top: 15px; right: 20px; font-size: 24px; cursor: pointer; color: #999; }
+        .close-modal { position: absolute; top: 20px; right: 25px; font-size: 30px; cursor: pointer; color: #ccc; transition: 0.3s; }
+        .close-modal:hover { color: #333; }
+        
         #doc-content { 
-            white-space: pre-wrap; text-align: left; line-height: 1.6; 
-            max-height: 400px; overflow-y: auto; color: #444; margin-top: 20px;
-            background: #f9f9f9; padding: 15px; border-radius: 15px;
+            white-space: pre-wrap; text-align: left; line-height: 1.8; 
+            max-height: 350px; overflow-y: auto; color: #444; margin-top: 20px;
+            background: #f8f9fa; padding: 20px; border-radius: 20px;
+            border: 1px inset rgba(0,0,0,0.05);
         }
     </style>
 </head>
@@ -68,34 +72,34 @@
     <div class="container">
         <h1>各国领导人</h1>
         <div class="leader-grid">
-            <div class="leader-card" onclick="openDoc('美国领导人', 'doc1.txt')">
+            <div class="leader-card" onclick="openDoc('特明轩 (美国总统)', 'doc1.txt')">
                 <img src="person1.png" alt="美国">
                 <span class="country-name">🇺🇸 美国 (USA)</span>
-                <span class="person-name">姓名1</span>
+                <span class="person-name">特明轩</span>
             </div>
 
-            <div class="leader-card" onclick="openDoc('中国领导人', 'doc2.txt')">
+            <div class="leader-card" onclick="openDoc('胡班长 (中国主席)', 'doc2.txt')">
                 <img src="person2.png" alt="中国">
                 <span class="country-name">🇨🇳 中国 (China)</span>
-                <span class="person-name">姓名2</span>
+                <span class="person-name">胡班长</span>
             </div>
 
-            <div class="leader-card" onclick="openDoc('俄罗斯领导人', 'doc3.txt')">
+            <div class="leader-card" onclick="openDoc('弗拉基米尔·石 (俄罗斯总统)', 'doc3.txt')">
                 <img src="person3.png" alt="俄罗斯">
                 <span class="country-name">🇷🇺 俄罗斯 (Russia)</span>
-                <span class="person-name">姓名3</span>
+                <span class="person-name">弗拉基米尔·石</span>
             </div>
 
-            <div class="leader-card" onclick="openDoc('法国领导人', 'doc4.txt')">
+            <div class="leader-card" onclick="openDoc('马克狼人 (法国总统)', 'doc4.txt')">
                 <img src="person4.png" alt="法国">
                 <span class="country-name">🇫🇷 法国 (France)</span>
-                <span class="person-name">姓名4</span>
+                <span class="person-name">马克狼人</span>
             </div>
 
-            <div class="leader-card" onclick="openDoc('英国领导人', 'doc5.txt')">
+            <div class="leader-card" onclick="openDoc('小智不列颠 (英国首相)', 'doc5.txt')">
                 <img src="person5.png" alt="英国">
                 <span class="country-name">🇬🇧 英国 (UK)</span>
-                <span class="person-name">姓名5</span>
+                <span class="person-name">小智不列颠</span>
             </div>
         </div>
     </div>
@@ -103,8 +107,8 @@
     <div id="doc-modal" onclick="closeDoc()">
         <div class="modal-body" onclick="event.stopPropagation()">
             <span class="close-modal" onclick="closeDoc()">&times;</span>
-            <h2 id="modal-title" style="margin-top:0; color:#2c3e50;"></h2>
-            <div id="doc-content">正在加载介绍...</div>
+            <h2 id="modal-title" style="margin-top:0; color:#c0392b; border-bottom: 2px solid #eee; padding-bottom: 10px;"></h2>
+            <div id="doc-content">正在读取机密文档...</div>
         </div>
     </div>
 
@@ -112,16 +116,16 @@
         async function openDoc(name, fileName) {
             document.getElementById('modal-title').innerText = name;
             document.getElementById('doc-modal').style.display = 'flex';
-            document.getElementById('doc-content').innerText = "读取中...";
+            document.getElementById('doc-content').innerText = "正在读取档案中...";
 
             try {
-                // 使用 fetch 自动读取你 GitHub 仓库里的 txt 文件
-                const response = await fetch(fileName);
-                if (!response.ok) throw new Error('文件找不到了');
+                // 加一个随机后缀防止浏览器缓存旧文件
+                const response = await fetch(fileName + '?v=' + Math.random());
+                if (!response.ok) throw new Error();
                 const text = await response.text();
                 document.getElementById('doc-content').innerText = text;
             } catch (err) {
-                document.getElementById('doc-content').innerText = "抱歉，暂时无法加载该领导人的介绍。";
+                document.getElementById('doc-content').innerText = "档案加载失败，请确认 " + fileName + " 已上传至仓库。";
             }
         }
 
