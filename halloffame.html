@@ -132,6 +132,30 @@
         function closeDoc() {
             document.getElementById('doc-modal').style.display = 'none';
         }
+    <script>
+        async function openDoc(name, fileName) {
+            console.log("正在尝试打开文件:", fileName); // 调试日志
+            document.getElementById('modal-title').innerText = name;
+            document.getElementById('doc-modal').style.display = 'flex';
+            document.getElementById('doc-content').innerText = "正在读取档案中...";
+
+            try {
+                const response = await fetch(fileName);
+                if (!response.ok) {
+                    throw new Error("服务器返回错误代码: " + response.status);
+                }
+                const text = await response.text();
+                document.getElementById('doc-content').innerText = text;
+            } catch (err) {
+                console.error(err);
+                document.getElementById('doc-content').innerText = "加载失败！\n原因：" + err.message + "\n请确保仓库里有 " + fileName + " 这个文件。";
+            }
+        }
+
+        function closeDoc() {
+            document.getElementById('doc-modal').style.display = 'none';
+        }
     </script>
+
 </body>
 </html>
